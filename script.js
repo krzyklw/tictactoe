@@ -44,6 +44,12 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 computerScore++;
             }
+            if (currentPlayer === "X") {
+                document.getElementById("userWinSound").play();
+            }
+            else if (currentPlayer === "O") {
+                document.getElementById("computerWinSound").play();
+            }
             gameOver = true;
         } else if (checkTie()) {
             message.innerText = "It's a tie!";
@@ -55,21 +61,22 @@ document.addEventListener("DOMContentLoaded", function () {
             if (currentPlayer === "O" && !gameOver) {
                 setTimeout(() => {
                     computerMove();
-                }, 300);
+                }, 1000);
             }
+    
+            scoreElement.innerText = `Player: ${playerScore} Computer: ${computerScore} Ties: ${ties}`;
         }
-
-        scoreElement.innerText = `Player: ${playerScore} Computer: ${computerScore} Ties: ${ties}`;
-    }
+    }    
 
     function cellClick(index) {
         if (!gameOver && board[index] === "") {
-            board[index] = currentPlayer;
-            const imageSrc = currentPlayer === "X" ? "close.png" : "open.png";
-            cells[index].innerHTML = `<img src="${imageSrc}" alt="${currentPlayer}" class="invert-color">`;
-            updateGame();
+          board[index] = currentPlayer;
+          const imageSrc = currentPlayer === "X" ? "close.png" : "open.png";
+          cells[index].innerHTML = `<img src="${imageSrc}" alt="${currentPlayer}" class="invert-color">`;
+          updateGame();
+          playRandomSound();
         }
-    }
+      }
 
     function resetGame() {
         board = ["", "", "", "", "", "", "", "", ""];
@@ -100,7 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
         board[bestMove] = "O";
         cells[bestMove].innerHTML = `<img src="open.png" alt="O" class="invert-color">`;
         updateGame();
-    }
+        playRandomSound();
+      }
 
     function findBestMove() {
         let bestMove = -1;
@@ -169,3 +177,15 @@ document.addEventListener("DOMContentLoaded", function () {
         return 0;
     }
 });
+
+const sounds = [
+    document.getElementById("sound1"),
+    document.getElementById("sound2"),
+    document.getElementById("sound3"),
+    document.getElementById("sound4"),
+  ];
+
+  function playRandomSound() {
+    const randomIndex = Math.floor(Math.random() * sounds.length);
+    sounds[randomIndex].play();
+  }
