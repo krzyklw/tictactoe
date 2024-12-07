@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIC-TAC-TOE | krzyklw</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,30 +11,40 @@
     <link rel="icon" type="image/x-icon" href="logo.png">
 </head>
 <body>
-    <h1>3 IN A ROW</h1>
-    <div class="board">
-        <div class="cell" id="cell-0"><img src="open.png" alt=""></div>
-        <div class="cell" id="cell-1"><img src="close.png" alt=""></div>
-        <div class="cell" id="cell-2"><img src="open.png" alt=""></div>
-        <div class="cell" id="cell-3"><img src="close.png" alt=""></div>
-        <div class="cell" id="cell-4"><img src="open.png" alt=""></div>
-        <div class="cell" id="cell-5"><img src="close.png" alt=""></div>
-        <div class="cell" id="cell-6"><img src="open.png" alt=""></div>
-        <div class="cell" id="cell-7"><img src="close.png" alt=""></div>
-        <div class="cell" id="cell-8"><img src="open.png" alt=""></div>
-    </div>
-    <audio id="sound1" src="sound (1).mp3"></audio>
-    <audio id="sound2" src="sound (2).mp3"></audio>
-    <audio id="sound3" src="sound (3).mp3"></audio>
-    <audio id="sound4" src="sound (4).mp3"></audio>
-    <audio id="userWinSound" src="winner.mp3"></audio>
-    <audio id="computerWinSound" src="lose.mp3"></audio>
-    <div class="message" id="message"></div>
-    <div class="score" id="score">Player: 0 Computer: 0 Ties: 0</div>
-    <button id="reset">Reset Game</button>
-    <button id="clear-scores">Clear Scores</button>
+    <main class="game-container">
+        <h1>TIC TAC TOE</h1>
+        <div class="game-status">
+            <div class="message" id="message" role="status" aria-live="polite"></div>
+            <div class="score" id="score" role="status">Player: 0 Computer: 0 Ties: 0</div>
+        </div>
+        
+        <div class="board" role="grid">
+            <div class="cell" id="cell-0" role="gridcell" tabindex="0"><img src="open.png" alt="empty cell"></div>
+            <div class="cell" id="cell-1" role="gridcell" tabindex="0"><img src="close.png" alt="empty cell"></div>
+            <div class="cell" id="cell-2" role="gridcell" tabindex="0"><img src="open.png" alt="empty cell"></div>
+            <div class="cell" id="cell-3" role="gridcell" tabindex="0"><img src="close.png" alt="empty cell"></div>
+            <div class="cell" id="cell-4" role="gridcell" tabindex="0"><img src="open.png" alt="empty cell"></div>
+            <div class="cell" id="cell-5" role="gridcell" tabindex="0"><img src="close.png" alt="empty cell"></div>
+            <div class="cell" id="cell-6" role="gridcell" tabindex="0"><img src="open.png" alt="empty cell"></div>
+            <div class="cell" id="cell-7" role="gridcell" tabindex="0"><img src="close.png" alt="empty cell"></div>
+            <div class="cell" id="cell-8" role="gridcell" tabindex="0"><img src="open.png" alt="empty cell"></div>
+        </div>
+
+        <div class="controls">
+            <button id="reset" class="btn">New Game</button>
+            <button id="clear-scores" class="btn">Reset Scores</button>
+        </div>
+    </main>
+
+    <audio id="sound1" src="sound (1).mp3" preload="auto"></audio>
+    <audio id="sound2" src="sound (2).mp3" preload="auto"></audio>
+    <audio id="sound3" src="sound (3).mp3" preload="auto"></audio>
+    <audio id="sound4" src="sound (4).mp3" preload="auto"></audio>
+    <audio id="userWinSound" src="winner.mp3" preload="auto"></audio>
+    <audio id="computerWinSound" src="lose.mp3" preload="auto"></audio>
+
     <footer>
-        <p>&copy; Anton Adobe 2023</p>
+        <p>&copy; Anton 2024</p>
     </footer>
     <script src="script.js"></script>
 </body>
