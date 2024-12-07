@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (currentPlayer === "O" && !gameOver) {
                 setTimeout(() => {
                     computerMove();
-                }, 1000);
+                }, 200);
             }
     
             scoreElement.innerText = `Player: ${playerScore} Computer: ${computerScore} Ties: ${ties}`;
@@ -113,26 +113,63 @@ document.addEventListener("DOMContentLoaded", function () {
     function findBestMove() {
         let bestMove = -1;
         let bestScore = -Infinity;
-
+        let alpha = -Infinity;
+        let beta = Infinity;
+        
+        // Prioritize center and corners first
+        const preferredMoves = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+        
+        // First, check if we can win in one move
         for (let i = 0; i < board.length; i++) {
             if (board[i] === "") {
                 board[i] = "O";
-                let score = minimax(board, 0, false);
+                if (checkWin("O")) {
+                    board[i] = "";
+                    return i;
+                }
+                board[i] = "";
+            }
+        }
+        
+        // Then check if we need to block opponent's winning move
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === "") {
+                board[i] = "X";
+                if (checkWin("X")) {
+                    board[i] = "";
+                    return i;
+                }
+                board[i] = "";
+            }
+        }
+
+        // If no immediate win or block needed, use strategic moves
+        for (const i of preferredMoves) {
+            if (board[i] === "") {
+                board[i] = "O";
+                let score = minimax(board, 0, false, alpha, beta);
                 board[i] = "";
                 if (score > bestScore) {
                     bestScore = score;
                     bestMove = i;
                 }
+                alpha = Math.max(alpha, bestScore);
+                if (beta <= alpha) break;
             }
         }
 
         return bestMove;
     }
 
-    function minimax(board, depth, isMaximizing) {
+    function minimax(board, depth, isMaximizing, alpha, beta) {
         const result = checkWinner(board);
         if (result !== null) {
             return result;
+        }
+        
+        // Add depth limit to prevent unnecessary deep searches
+        if (depth >= 6) {
+            return evaluatePosition(board);
         }
 
         if (isMaximizing) {
@@ -140,9 +177,11 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === "") {
                     board[i] = "O";
-                    let score = minimax(board, depth + 1, false);
+                    let score = minimax(board, depth + 1, false, alpha, beta);
                     board[i] = "";
                     bestScore = Math.max(score, bestScore);
+                    alpha = Math.max(alpha, bestScore);
+                    if (beta <= alpha) break; // Alpha-beta pruning
                 }
             }
             return bestScore;
@@ -151,13 +190,32 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === "") {
                     board[i] = "X";
-                    let score = minimax(board, depth + 1, true);
+                    let score = minimax(board, depth + 1, true, alpha, beta);
                     board[i] = "";
                     bestScore = Math.min(score, bestScore);
+                    beta = Math.min(beta, bestScore);
+                    if (beta <= alpha) break; // Alpha-beta pruning
                 }
             }
             return bestScore;
         }
+    }
+
+    function evaluatePosition(board) {
+        // Simple position evaluation
+        let score = 0;
+        // Value center position
+        if (board[4] === "O") score += 0.3;
+        if (board[4] === "X") score -= 0.3;
+        
+        // Value corners
+        const corners = [0, 2, 6, 8];
+        for (let corner of corners) {
+            if (board[corner] === "O") score += 0.2;
+            if (board[corner] === "X") score -= 0.2;
+        }
+        
+        return score;
     }
 
     function checkWinner(board) {
